@@ -1,0 +1,178 @@
+#Bienvenue dans l'algorithme de la  Mini-Calculatrice
+#Vous trouverez quelques commentaires pour vous aidez à vous y retrouver
+#Mon nom figure dans le titre de la calculatrice si vous en avez besoin ( une fois lancée )
+
+
+#On importe le module Tkinter
+#Il va permettre de gérer l'affichage de la calculatrice
+
+from tkinter import *
+from tkinter import font
+
+#On définit la variable qui va contenir le calcul à opérer
+
+ligneCalcul = ""
+
+
+#On définit la fonction qui permet d'afficher le résultat de l'opération
+
+    
+def makeEval():
+    result =Eval(ligneCalcul)
+    ecranText.delete(0.0,END)
+    ecranText.insert(END,result)
+
+
+#On définit la fonction qui permet de réinitialiser la ligne de calcul
+
+def calculReset() :
+   global ligneCalcul 
+   ligneCalcul = ""
+   ecranText.delete(0.0,END)
+
+#On définit la fonction qui permet de supprimer le dernier caractère de la ligne de calcul
+
+def delete() :
+    global ligneCalcul
+    listCalcul = list(ligneCalcul)
+    listLen = len(listCalcul)
+    del listCalcul[listLen-1]
+    ligneCalcul = ''.join(listCalcul)
+    ecranText.delete('end - 2 chars')
+
+
+#On définit la fonction qui réalise le calcul en tenant compte des priorités opératoires
+
+#Eval
+#region Eval
+def isNumeric(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+def Eval(e):
+  if isNumeric(e):
+    return float(e)
+  else:
+      if "+" in e or "-" in e:
+          pos = 0
+          if "+" in e:
+              pos = e.find("+")
+          else:
+              pos = e.find("-")
+          
+          left, right = SplitAtPos(e, pos)
+
+          if "+" in e:
+              return Eval(left) + Eval(right)
+          else:
+              return Eval(left) - Eval(right)
+
+      if "*" in e or "/" in e:
+          pos = 0
+          if "*" in e:
+              pos = e.find("*")
+          else:
+              pos = e.find("/")
+          
+          left, right = SplitAtPos(e, pos)
+
+          if "*" in e:
+              return Eval(left) * Eval(right)
+          else:
+              return Eval(left) / Eval(right)
+
+
+def SplitAtPos(exp, pos):
+    left = ""
+    right = ""
+    for i in range(0, len(exp)):
+        if i < pos:
+            left += exp[i]
+        elif i > pos:
+            right += exp[i]
+
+    return (left, right)
+
+#endregion
+
+
+#On définit les output de chaque boutons lorsqu'on clique dessus
+
+def clicBouton(numeroTouche):
+    global ligneCalcul 
+    ligneCalcul = (str(ligneCalcul) + numeroTouche)
+    ecranText.insert(END,numeroTouche)
+    return()
+
+
+#Affichage de la calculatrice
+#region TkinterDisplay
+fenetre = Tk()
+
+fenetre.title('Mini-Calculatrice de LARBI Youcef')
+
+fenetre.geometry("400x500")
+
+
+touche0 = Button(fenetre, text ="0", command = lambda :  clicBouton("0"), width=10, height=5, borderwidth=3, bg= "#00ffff", fg = "black" , relief = RAISED)
+touche0.place(x = 0, y = 160)
+
+touche1 = Button(fenetre, text ="1",command = lambda : clicBouton("1"), width=10, height=5, borderwidth=3,bg= "#00ffff", fg = "black" , relief = RAISED )
+touche1.place(x = 80, y = 160)
+
+touche2 = Button(fenetre, text ="2", command = lambda : clicBouton("2"), width=10, height=5, borderwidth=3, bg= "#00ffff", fg = "black" , relief = RAISED)
+touche2.place(x = 160, y = 160)
+
+touche3 = Button(fenetre, text ="3", command = lambda : clicBouton("3"), width=10, height=5, borderwidth=3, bg= "#00ffff", fg = "black" , relief = RAISED)
+touche3.place(x = 240, y = 160)
+
+touche4 = Button(fenetre, text ="4", command = lambda :  clicBouton("4"), width=10, height=5, borderwidth=3, bg= "#00ffff", fg = "black" , relief = RAISED)
+touche4.place(x = 0, y = 245)
+
+touche5 = Button(fenetre, text ="5", command = lambda :  clicBouton("5"), width=10, height=5, borderwidth=3, bg= "#00ffff", fg = "black" , relief = RAISED)
+touche5.place(x = 80, y = 245)
+
+touche6 = Button(fenetre, text ="6", command = lambda :  clicBouton("6"), width=10, height=5, borderwidth=3, bg= "#00ffff", fg = "black" , relief = RAISED)
+touche6.place(x = 160, y = 245)
+
+touche7 = Button(fenetre, text ="7", command = lambda :  clicBouton("7"), width=10, height=5, borderwidth=3, bg= "#00ffff", fg = "black" , relief = RAISED)
+touche7.place(x = 240, y = 245)
+
+touche8 = Button(fenetre, text ="8", command = lambda :  clicBouton("8"), width=10, height=5, borderwidth=3, bg= "#00ffff", fg = "black" , relief = RAISED)
+touche8.place(x = 0, y = 330)
+
+touche9 = Button(fenetre, text ="9", command = lambda :  clicBouton("9"), width=10, height=5, borderwidth=3, bg= "#00ffff", fg = "black" , relief = RAISED)
+touche9.place(x = 80, y = 330)
+
+toucheAddition = Button(fenetre, text ="+", command = lambda : clicBouton("+"), width=10, height=5, borderwidth=3, bg= "#828283", fg = "black" , relief = RAISED)
+toucheAddition.place(x = 0, y = 417)
+
+toucheSoustraction = Button(fenetre, text ="-", command = lambda : clicBouton("-"), width=10, height=5, borderwidth=3, bg= "#828283", fg = "black" , relief = RAISED)
+toucheSoustraction.place(x = 80, y = 417)
+
+toucheMultiplication = Button(fenetre, text ="*", command = lambda : clicBouton("*"), width=10, height=5, borderwidth=3, bg= "#828283", fg = "black" , relief = RAISED)
+toucheMultiplication.place(x = 160, y = 417)
+
+toucheDivision = Button(fenetre, text ="/", command = lambda : clicBouton("/"), width=10, height=5, borderwidth=3, bg= "#828283", fg = "black" , relief = RAISED)
+toucheDivision.place(x = 240, y = 417)
+
+toucheEnter = Button(fenetre, text ="Enter", command = lambda : makeEval(), width=10, height=22, borderwidth=4, bg= "#00b200", fg = "black" , relief = RAISED )
+toucheEnter.place(x = 320, y = 160)
+
+toucheAC = Button(fenetre, text="AC", command = lambda : calculReset(), width = 10, height=5, borderwidth = 3, bg= "#db0102", fg = "black" , relief = RAISED)
+toucheAC.place(x = 160, y = 330)
+
+toucheC = Button(fenetre, text="C", command = lambda : delete(),width = 10, height=5, borderwidth = 3, bg= "#db0102", fg = "black" , relief = RAISED)
+toucheC.place(x = 240, y = 330)
+
+
+ecranText = Text(fenetre, height = 10 , width = 50, relief = RAISED, bg = "#d3e0e3", fg="#0001fd")
+ecranText.config(state=NORMAL)
+ecranText.place(x = 0, y = 0)
+
+
+fenetre.mainloop()
+#endregion
